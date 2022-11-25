@@ -1,7 +1,7 @@
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-export default function SplashScreen() {
+export default function SplashScreen({}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inner_container}>
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     textAlign: 'center',
     marginVertical: 10,
-    fontSize: 20,
+    fontSize: 30,
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 9},
+    textShadowOffset: {width: -1, height: 15},
     textShadowRadius: 10,
   },
 });
