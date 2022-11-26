@@ -9,11 +9,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
+import {ValidateEmail} from '../utils';
+import {AuthContext} from '../context/AuthContext';
+import SimpleToast from 'react-native-simple-toast';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const {LoginFinder, setLoginInfo, loginInfo, registerUsers} =
+    useContext(AuthContext);
+
+  const handleLogin = () => {
+    if (email !== null && password !== null) {
+      if (ValidateEmail(email)) {
+        if (LoginFinder(email, password)) {
+          setLoginInfo([{email, password}]);
+          SimpleToast.show('Login Successfull', SimpleToast.SHORT);
+        } else {
+          SimpleToast.show('Invalid Credentials', SimpleToast.SHORT);
+        }
+      } else {
+        SimpleToast.show('Invalid Email', SimpleToast.SHORT);
+      }
+    } else {
+      SimpleToast.show('Invalid Inputs', SimpleToast.SHORT);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inner_container}>
@@ -41,7 +63,11 @@ export default function Login({navigation}) {
           onChangeText={setPassword}
           style={[styles.input, {width: 0.8 * Dimensions.get('screen').width}]}
         />
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            handleLogin();
+          }}>
           <View
             style={[
               styles.button,

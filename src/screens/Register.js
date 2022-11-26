@@ -9,10 +9,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from '../context/AuthContext';
+import {ValidateEmail} from '../utils';
+import SimpleToast from 'react-native-simple-toast';
 export default function Register({navigation}) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const {addUser, registerUsers} = useContext(AuthContext);
+
+  const handleRegister = () => {
+    if (email !== null && password !== null) {
+      if (ValidateEmail(email)) {
+        addUser(email, password);
+        SimpleToast.show('Registeration Successfull', SimpleToast.SHORT);
+        navigation.replace('Login');
+        setEmail('');
+        setPassword('');
+      } else {
+        SimpleToast.show('Invalid Email', SimpleToast.SHORT);
+      }
+    } else {
+      SimpleToast.show('Invalid Inputs', SimpleToast.SHORT);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inner_container}>
@@ -39,7 +59,11 @@ export default function Register({navigation}) {
           onChangeText={setPassword}
           style={[styles.input, {width: 0.8 * Dimensions.get('screen').width}]}
         />
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            handleRegister();
+          }}>
           <View
             style={[
               styles.button,

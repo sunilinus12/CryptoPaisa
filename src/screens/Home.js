@@ -1,12 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {Button, StyleSheet, Text, View} from 'react-native';
+import React, {useContext} from 'react';
+import {AuthContext} from '../context/AuthContext';
 
 export default function Home() {
+  const {setLoginInfo} = useContext(AuthContext);
   return (
     <View>
-      <Text>Home</Text>
+      <Button
+        onPress={() => {
+          setLoginInfo([]);
+        }}
+        title="logout"
+      />
     </View>
-  )
+  );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

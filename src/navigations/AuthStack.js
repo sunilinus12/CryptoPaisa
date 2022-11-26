@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/Home';
 import MarketScreen from '../screens/MarketScreen';
@@ -8,22 +8,24 @@ import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from '../screens/SplashScreen';
 import Login from '../screens/Login';
 import Register from '../screens/Register';
+import {AuthContext} from '../context/AuthContext';
 
 const Stack = createStackNavigator();
 export default function AuthStack() {
   const [isSplashLoading, setIsSplashLoading] = useState(true);
-
+  const {loginInfo} = useContext(AuthContext);
   useEffect(() => {
     setTimeout(() => {
       setIsSplashLoading(false);
     }, 3000);
   }, []);
 
+  console.log(loginInfo.length,"login")
   return (
     <NavigationContainer>
       {isSplashLoading ? (
         <SplashScreens />
-      ) : false ? (
+      ) : loginInfo.length > 0 ? (
         <AfterLoginScreens />
       ) : (
         <AuthScreens />

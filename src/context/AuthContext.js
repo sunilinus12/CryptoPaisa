@@ -1,25 +1,39 @@
 import React, {createContext, useState} from 'react';
+import SimpleToast from 'react-native-simple-toast';
+import {ValidateEmail} from '../utils';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
   const [isSplashLoading, setIsSplashLoading] = useState(true);
-  const [registerInfo, setRegisterInfo] = useState([]);
+  const [registerUsers, setRegisterUsers] = useState([]);
   const [loginInfo, setLoginInfo] = useState([]);
 
-  const handleRegister = ({email, password}) => {
-    setRegisterInfo({email, password});
+  const addUser = (email, password) => {
+    setRegisterUsers([...registerUsers, {email, password}]);
+  };
+  const LoginFinder = (email, password) => {
+    let b = registerUsers.filter(
+      i => i.email === email && i.password === password,
+    );
+    if (b.length > 0) {
+      setLoginInfo([{email, password}]);
+      return true;
+    }
+
+    return false;
   };
   return (
     <AuthContext.Provider
       value={{
         isSplashLoading,
         setIsSplashLoading,
-        registerInfo,
-        setRegisterInfo,
+        registerUsers,
+        setRegisterUsers,
         loginInfo,
         setLoginInfo,
-        handleRegister,
+        addUser,
+        LoginFinder,
       }}>
       {children}
     </AuthContext.Provider>
