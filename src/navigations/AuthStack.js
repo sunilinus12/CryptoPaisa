@@ -12,20 +12,14 @@ import {AuthContext} from '../context/AuthContext';
 
 const Stack = createStackNavigator();
 export default function AuthStack() {
-  const [isSplashLoading, setIsSplashLoading] = useState(true);
-  const {loginInfo} = useContext(AuthContext);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsSplashLoading(false);
-    }, 3000);
-  }, []);
+  const {registerUsers,loginInfo, IsSplashLoading} = useContext(AuthContext);
 
-  console.log(loginInfo.length,"login")
+  console.log(registerUsers);
   return (
     <NavigationContainer>
-      {isSplashLoading ? (
+      {IsSplashLoading ? (
         <SplashScreens />
-      ) : loginInfo.length > 0 ? (
+      ) : loginInfo?.length > 0 ? (
         <AfterLoginScreens />
       ) : (
         <AuthScreens />

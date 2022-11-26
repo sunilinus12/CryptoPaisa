@@ -3,12 +3,12 @@ import React, {useContext} from 'react';
 import {AuthContext} from '../context/AuthContext';
 
 export default function Home() {
-  const {setLoginInfo} = useContext(AuthContext);
+  const {Logout} = useContext(AuthContext);
   return (
     <View>
       <Button
         onPress={() => {
-          setLoginInfo([]);
+          Logout();
         }}
         title="logout"
       />

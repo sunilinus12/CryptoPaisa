@@ -16,16 +16,19 @@ import SimpleToast from 'react-native-simple-toast';
 export default function Register({navigation}) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const {addUser, registerUsers} = useContext(AuthContext);
+  const {addUser, isRegister} = useContext(AuthContext);
 
   const handleRegister = () => {
     if (email !== null && password !== null) {
       if (ValidateEmail(email)) {
-        addUser(email, password);
-        SimpleToast.show('Registeration Successfull', SimpleToast.SHORT);
-        navigation.replace('Login');
-        setEmail('');
-        setPassword('');
+        if (isRegister(email, password)) {
+          SimpleToast.show('Registeration Successfull', SimpleToast.SHORT);
+          navigation.replace('Login');
+          setEmail('');
+          setPassword('');
+        } else {
+          SimpleToast.show('Email Already In Use', SimpleToast.SHORT);
+        }
       } else {
         SimpleToast.show('Invalid Email', SimpleToast.SHORT);
       }
@@ -49,6 +52,7 @@ export default function Register({navigation}) {
           placeholderTextColor={'gray'}
           value={email}
           onChangeText={setEmail}
+          autoComplete={'email'}
           style={[styles.input, {width: 0.8 * Dimensions.get('screen').width}]}
         />
         <TextInput
@@ -88,6 +92,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Platform.OS == 'ios' ? '30%' : '20%',
+    backgroundColor: 'white',
   },
   input: {
     width: '80%',
@@ -125,6 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: '15%',
+    backgroundColor: 'white',
   },
   textsmall: {
     fontSize: 12,
