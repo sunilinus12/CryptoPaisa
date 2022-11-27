@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   FlatList,
+  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -34,7 +35,7 @@ export default function MarketScreen() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'white',
+          backgroundColor: '#f9fafc',
         }}>
         <ActivityIndicator size={'large'} color={'red'} />
       </View>
@@ -42,7 +43,7 @@ export default function MarketScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.title_container}>
         <Text style={styles.text_left}>Market</Text>
         <View style={styles.inner_title_container}>
@@ -60,36 +61,36 @@ export default function MarketScreen() {
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f9fafc',
     paddingHorizontal: 20,
   },
   title_container: {
-    height: 70,
     width: '100%',
     paddingVertical: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
+    paddingTop: 0,
   },
   inner_title_container: {
     alignItems: 'flex-end',
   },
   text_left: {
     fontSize: 24,
-    color: '#0A445E',
+    color: '#194245',
     fontWeight: '500',
   },
   text_right_up: {
     fontSize: 15,
-    color: 'gray',
+    color: '#949b9b',
     fontWeight: '400',
   },
   text_right_down: {

@@ -10,6 +10,11 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function ItemCard({item}) {
   const navigation = useNavigation();
+
+  const handleTriangle = i => {
+    if (i >= 0) return true;
+    return false;
+  };
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -34,9 +39,40 @@ export default function ItemCard({item}) {
               alignItems: 'flex-end',
             }}>
             <Text style={styles.usd_value}>{item.current_price} USD</Text>
-            <Text style={styles.percentage}>
-              {item.price_change_percentage_24h.toFixed(3)}%
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Image
+                source={
+                  handleTriangle(item.price_change_percentage_24h.toFixed(3))
+                    ? require('../assets/triangleup.png')
+                    : require('../assets/triangledown.png')
+                }
+                style={{
+                  width: 8,
+                  height: 8,
+                  resizeMode: 'contain',
+                  marginTop: '5%',
+                  marginRight: 3,
+                }}
+              />
+              <Text
+                style={[
+                  styles.percentage,
+                  {
+                    color: handleTriangle(
+                      item.price_change_percentage_24h.toFixed(3),
+                    )
+                      ? '#28A56C'
+                      : 'red',
+                  },
+                ]}>
+                {item.price_change_percentage_24h.toFixed(3)}%
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.down_container}>
@@ -55,10 +91,12 @@ const styles = StyleSheet.create({
   item_container: {
     height: 120,
     width: '100%',
-    backgroundColor: 'whitesmoke',
+    backgroundColor: '#fdfdfd',
     padding: '5%',
     borderRadius: 10,
     marginBottom: '5%',
+    borderWidth: 1,
+    borderColor: '#dee4e4',
   },
   top_container: {
     flex: 1,
@@ -68,7 +106,7 @@ const styles = StyleSheet.create({
   },
   down_container: {
     flex: 1,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: '#fdfdfd',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -79,7 +117,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   item_title: {
-    color: '#092D5E',
+    color: '#044857',
     fontSize: 15,
     fontWeight: '400',
   },
@@ -99,8 +137,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     position: 'absolute',
     left: 0,
-    borderColor: 'gray',
-    opacity: 0.6,
+    borderColor: '#bcbcbc',
+    opacity: 1,
+    backgroundColor: '#f9fafc',
   },
   popular_text: {
     fontSize: 11,

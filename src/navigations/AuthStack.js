@@ -85,7 +85,13 @@ const AfterLoginScreens = () => {
         }}
       />
       <Stack.Screen name="Market" component={MarketScreen} />
-      <Stack.Screen name="MarketDetail" component={MarketDetailScreen} />
+      <Stack.Screen
+        name="MarketDetail"
+        options={{
+          title: 'Detail',
+        }}
+        component={MarketDetailScreen}
+      />
     </Stack.Navigator>
   );
 };
