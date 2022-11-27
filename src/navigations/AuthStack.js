@@ -46,7 +46,13 @@ const AfterLoginScreens = () => {
         headerTitleStyle: {
           fontSize: 15,
           fontWeight: '500',
+          color: '#044D52',
         },
+        headerStyle: {
+          backgroundColor: '#f6f9fb',
+        },
+        headerShadowVisible: false,
+        headerTintColor: '#2b797f',
       }}>
       <Stack.Screen
         name="Home"

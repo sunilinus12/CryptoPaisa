@@ -1,40 +1,53 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ItemCard({item}) {
+  const navigation = useNavigation();
   return (
-    <View style={styles.item_container}>
-      <View style={styles.top_container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Image
-            source={{uri: item.image}}
-            style={styles.img}
-            resizeMode="contain"
-          />
-          <Text style={styles.item_title}>{item.name}</Text>
-        </View>
-        <View
-          style={{
-            alignItems: 'flex-end',
-          }}>
-          <Text style={styles.usd_value}>{item.current_price} USD</Text>
-          <Text style={styles.percentage}>
-            {item.price_change_percentage_24h.toFixed(3)}%
-          </Text>
-        </View>
-      </View>
-      <View style={styles.down_container}>
-        {item.name === 'Bitcoin' && (
-          <View style={styles.wrap_popular}>
-            <Text style={styles.popular_text}>Most Popular</Text>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        navigation.navigate('MarketDetail', {item});
+      }}>
+      <View style={styles.item_container}>
+        <View style={styles.top_container}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={{uri: item.image}}
+              style={styles.img}
+              resizeMode="contain"
+            />
+            <Text style={styles.item_title}>{item.name}</Text>
           </View>
-        )}
+          <View
+            style={{
+              alignItems: 'flex-end',
+            }}>
+            <Text style={styles.usd_value}>{item.current_price} USD</Text>
+            <Text style={styles.percentage}>
+              {item.price_change_percentage_24h.toFixed(3)}%
+            </Text>
+          </View>
+        </View>
+        <View style={styles.down_container}>
+          {item.name === 'Bitcoin' && (
+            <View style={styles.wrap_popular}>
+              <Text style={styles.popular_text}>Most Popular</Text>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
