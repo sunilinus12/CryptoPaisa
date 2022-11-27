@@ -1,8 +1,46 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import ItemCard from '../components/ItemCard';
+import axios from 'axios';
 
 export default function MarketScreen() {
+  const [data, setdata] = useState([]);
+  const getData = async () => {
+    try {
+      const res = await axios.get(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h',
+      );
+      if (res.status) {
+        setdata(res?.data);
+      }
+    } catch (error) {
+      console.log('error while getting data', error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+  if (data.length === 0) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'white',
+        }}>
+        <ActivityIndicator size={'large'} color={'red'} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.title_container}>
@@ -13,7 +51,14 @@ export default function MarketScreen() {
         </View>
       </View>
       <View style={{flex: 1}}>
-        <ItemCard />
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return <ItemCard item={item} />;
+          }}
+        />
       </View>
     </View>
   );
@@ -22,7 +67,7 @@ export default function MarketScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: 'white',
     paddingHorizontal: 20,
   },
   title_container: {
