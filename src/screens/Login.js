@@ -24,7 +24,6 @@ export default function Login({navigation}) {
     if (email !== null && password !== null) {
       if (ValidateEmail(email)) {
         if (LoginFinder(email, password)) {
-          setLoginInfo([{email, password}]);
           SimpleToast.show('Login Successfull', SimpleToast.SHORT);
         } else {
           SimpleToast.show('Invalid Credentials', SimpleToast.SHORT);

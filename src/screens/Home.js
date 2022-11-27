@@ -5,7 +5,7 @@ import {AuthContext} from '../context/AuthContext';
 export default function Home() {
   const {Logout} = useContext(AuthContext);
   return (
-    <View>
+    <View style={styles.container}>
       <Button
         onPress={() => {
           Logout();
@@ -16,4 +16,10 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

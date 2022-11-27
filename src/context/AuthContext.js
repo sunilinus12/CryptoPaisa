@@ -29,21 +29,23 @@ export const AuthProvider = ({children}) => {
     );
     if (b.length > 0) {
       setLoginInfo([{email, password}]);
-
+      storingLoginUser([{email, password}]);
       return true;
     }
-    storingLoginUser([{email, password}]);
+
     return false;
   };
   const IsLogin = async () => {
     try {
       const res = await EncryptedStorage.getItem('LoginUser');
-
+      console.log('retrieving from storage', res);
       setTimeout(() => {
         if (res !== undefined && res !== null) {
           setLoginInfo(JSON.parse(res));
           setIsSplashLoading(false);
+          console.log('retrieving from storage... inside');
         }
+
         setIsSplashLoading(false);
       }, 3000);
     } catch (error) {
@@ -103,6 +105,7 @@ const storingUsers = async i => {
 const storingLoginUser = async i => {
   try {
     await EncryptedStorage.setItem('LoginUser', JSON.stringify(i));
+    console.log('stored in storage');
   } catch (error) {
     console.log('error while storing LoginUser in storage', error);
   }
