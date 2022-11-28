@@ -51,13 +51,7 @@ export default function ItemCard({item}) {
                     ? require('../assets/triangleup.png')
                     : require('../assets/triangledown.png')
                 }
-                style={{
-                  width: 8,
-                  height: 8,
-                  resizeMode: 'contain',
-                  marginTop: '5%',
-                  marginRight: 3,
-                }}
+                style={styles.triangelup}
               />
               <Text
                 style={[
@@ -144,5 +138,12 @@ const styles = StyleSheet.create({
   popular_text: {
     fontSize: 11,
     color: '#075104',
+  },
+  triangelup: {
+    width: 8,
+    height: 8,
+    resizeMode: 'contain',
+    marginTop: '5%',
+    marginRight: 3,
   },
 });
