@@ -1,17 +1,24 @@
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import ItemCard from '../components/ItemCard';
 import axios from 'axios';
+import {AuthContext} from '../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function MarketScreen() {
   const [data, setdata] = useState([]);
+  const {Logout, DeleteAccount, isLoading} = useContext(AuthContext);
+
   const getData = async () => {
     try {
       const res = await axios.get(
@@ -28,6 +35,27 @@ export default function MarketScreen() {
     getData();
   }, []);
 
+  const handleLogout = () => {
+    Alert.alert('Confirm ', 'Are You Sure You Want To Logout ', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => Logout()},
+    ]);
+  };
+
+  const handleDeletedAccount = () => {
+    Alert.alert('Confirm ', 'Are You Sure You Want To Delete Account ', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('OK Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => DeleteAccount()},
+    ]);
+  };
   if (data.length === 0) {
     return (
       <View
@@ -44,6 +72,38 @@ export default function MarketScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Spinner visible={isLoading} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: 10,
+        }}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            handleLogout();
+          }}>
+          <Image
+            source={require('../assets/power.png')}
+            style={{
+              width: 24,
+              height: 24,
+            }}
+          />
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            handleDeletedAccount();
+          }}>
+          <Image
+            source={require('../assets/delete.png')}
+            style={{
+              width: 24,
+              height: 24,
+            }}
+          />
+        </TouchableWithoutFeedback>
+      </View>
       <View style={styles.title_container}>
         <Text style={styles.text_left}>Market</Text>
         <View style={styles.inner_title_container}>

@@ -8,20 +8,17 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext} from 'react';
-import {AuthContext} from '../context/AuthContext';
+import React from 'react';
 import {Data, graduationsList} from '../utils';
 
 export default function Home() {
-  const {Logout} = useContext(AuthContext);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         <Image
           style={{
             width: '100%',
-            height: 0.30 * Dimensions.get('screen').height,
+            height: 0.28 * Dimensions.get('screen').height,
           }}
           resizeMode="cover"
           source={require('../assets/p2.jpg')}
@@ -86,6 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafc',
     paddingVertical: 5,
     paddingHorizontal: 15,
+    position: 'relative',
   },
   title: {
     color: 'black',

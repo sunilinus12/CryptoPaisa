@@ -9,7 +9,7 @@ export const AuthProvider = ({children}) => {
   const [IsSplashLoading, setIsSplashLoading] = useState(true);
   const [registerUsers, setRegisterUsers] = useState([]);
   const [loginInfo, setLoginInfo] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const addUser = (email, password) => {
     setRegisterUsers([...registerUsers, {email, password}]);
     storingUsers([...registerUsers, {email, password}]);
@@ -71,11 +71,27 @@ export const AuthProvider = ({children}) => {
 
   const Logout = async () => {
     try {
+      setIsLoading(true);
       await EncryptedStorage.removeItem('LoginUser');
       setLoginInfo([]);
+      setIsLoading(false);
+      SimpleToast.show('Logout Successfull', SimpleToast.SHORT);
     } catch (error) {
       console.log('error while logout ', error);
     }
+  };
+
+  const DeleteAccount = async () => {
+    const email = loginInfo[0]?.email;
+    try {
+      setIsLoading(true);
+      let b = registerUsers.filter(i => i.email != email);
+      setRegisterUsers(b);
+      storingUsers(b);
+      await EncryptedStorage.removeItem('LoginUser');
+      setLoginInfo([]);
+      SimpleToast.show('Account Deleted ', SimpleToast.SHORT);
+    } catch (error) {}
   };
   return (
     <AuthContext.Provider
@@ -90,6 +106,8 @@ export const AuthProvider = ({children}) => {
         LoginFinder,
         isRegister,
         Logout,
+        DeleteAccount,
+        isLoading,
       }}>
       {children}
     </AuthContext.Provider>

@@ -13,9 +13,8 @@ import {AuthContext} from '../context/AuthContext';
 const Stack = createStackNavigator();
 
 export default function AuthStack() {
-  const {registerUsers, loginInfo, IsSplashLoading} = useContext(AuthContext);
+  const {loginInfo, IsSplashLoading} = useContext(AuthContext);
 
-  // console.log(registerUsers,loginInfo);
   return (
     <NavigationContainer>
       {IsSplashLoading ? (

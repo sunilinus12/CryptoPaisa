@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
     borderColor: '#dee4e4',
   },
   top_container: {
-    flex: 1,
+    flex: 0.6,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   down_container: {
-    flex: 1,
+    flex: 0.4,
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     justifyContent: 'center',
