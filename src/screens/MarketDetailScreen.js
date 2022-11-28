@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -61,8 +62,11 @@ export default function MarketDetailScreen({route}) {
             width: '100%',
             height: 400,
             backgroundColor: 'white',
-          }}
-        />
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ActivityIndicator size={'large'} color={'red'} />
+        </View>
         <View
           style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
           <View
