@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {LineChart} from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
 
 export default function ItemCard({item}) {
   const navigation = useNavigation();
@@ -15,6 +17,8 @@ export default function ItemCard({item}) {
     if (i >= 0) return true;
     return false;
   };
+
+  console.log(item.sparkline_in_7d.price);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -75,6 +79,12 @@ export default function ItemCard({item}) {
               <Text style={styles.popular_text}>Most Popular</Text>
             </View>
           )}
+          <LineChart
+            style={{height: '100%', width: '60%', marginLeft: '10%'}}
+            data={item.sparkline_in_7d.price}
+            svg={{stroke: 'black'}}
+            curve={shape.curveNatural}
+            contentInset={{top: 0, bottom: 0}}></LineChart>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -83,7 +93,7 @@ export default function ItemCard({item}) {
 
 const styles = StyleSheet.create({
   item_container: {
-    height: 120,
+    height: 130,
     width: '100%',
     backgroundColor: '#fdfdfd',
     padding: '5%',
@@ -93,16 +103,15 @@ const styles = StyleSheet.create({
     borderColor: '#dee4e4',
   },
   top_container: {
-    flex: 0.6,
+    flex: 0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   down_container: {
-    flex: 0.4,
+    flex: 0.5,
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
-    justifyContent: 'center',
     position: 'relative',
   },
   img: {
