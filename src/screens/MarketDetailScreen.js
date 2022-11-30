@@ -1,21 +1,27 @@
 import {
   ActivityIndicator,
+  Dimensions,
   Image,
   processColor,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {CandleStickChart} from 'react-native-charts-wrapper';
 import axios from 'axios';
+import SimpleToast from 'react-native-simple-toast';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 export default function MarketDetailScreen({route}) {
   const {item} = route.params;
   const [chartdata, setChartData] = useState([]);
   const [loading, setloading] = useState(false);
+  const [Time, setTime] = useState('1d');
   const handleTriangle = i => {
     if (i >= 0) return true;
     return false;
@@ -23,11 +29,10 @@ export default function MarketDetailScreen({route}) {
 
   const handleChart = async () => {
     try {
-      console.log(item.symbol);
+      setloading(true);
       const res = await axios.get(
-        `https://api.binance.com/api/v3/klines?symbol=${(item?.symbol).toUpperCase()}USDT&interval=1h&limit=10`,
+        `https://api.binance.com/api/v3/klines?symbol=${(item?.symbol).toUpperCase()}USDT&interval=${Time}&limit=60`,
       );
-      console.log('worign..');
       if (res.status) {
         let r = res.data.map(i => {
           return {
@@ -38,21 +43,17 @@ export default function MarketDetailScreen({route}) {
           };
         });
         r = JSON.parse(JSON.stringify(r));
-        console.log('hello', r);
         setChartData(r);
+        setloading(false);
       }
     } catch (error) {}
   };
   useEffect(() => {
     handleChart();
-  }, []);
+  }, [Time]);
 
   if (chartdata.length === 0) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size={'large'} color="red" />
-      </View>
-    );
+    return <LoadingIndicator />;
   }
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -98,48 +99,52 @@ export default function MarketDetailScreen({route}) {
         <View
           style={{
             width: '100%',
-            height: 400,
+            height: 0.5 * Dimensions.get('screen').height,
             backgroundColor: '#f6f9fb',
           }}>
-          <CandleStickChart
-            style={{flex: 1}}
-            data={{
-              dataSets: [
-                {
-                  values: chartdata,
-                  label: '',
-                  config: {
-                    highlightColor: processColor('darkgray'),
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <CandleStickChart
+              style={{flex: 1}}
+              data={{
+                dataSets: [
+                  {
+                    values: chartdata,
+                    label: '',
+                    config: {
+                      highlightColor: processColor('darkgray'),
 
-                    shadowColor: processColor('black'),
-                    shadowWidth: 1,
-                    shadowColorSameAsCandle: true,
-                    increasingColor: processColor('#71BD6A'),
-                    increasingPaintStyle: 'FILL',
-                    decreasingColor: processColor('#D14B5A'),
+                      shadowColor: processColor('black'),
+                      shadowWidth: 1,
+                      shadowColorSameAsCandle: true,
+                      increasingColor: processColor('#71BD6A'),
+                      increasingPaintStyle: 'FILL',
+                      decreasingColor: processColor('#D14B5A'),
+                    },
+                    xAxis: {},
+                    yAxis: {},
                   },
-                  xAxis: {},
-                  yAxis: {},
-                },
-              ],
-            }}
-            marker={{
-              enabled: true,
-              markerColor: processColor('#2c3e50'),
-              textColor: processColor('white'),
-            }}
-            chartDescription={{text: ''}}
-            legend={{
-              enabled: true,
-              textSize: 14,
-              form: 'CIRCLE',
-              wordWrapEnabled: true,
-            }}
-            xAxis={{}}
-            yAxis={{}}
-            maxVisibleValueCount={16}
-            autoScaleMinMaxEnabled={false}
-          />
+                ],
+              }}
+              marker={{
+                enabled: true,
+                markerColor: processColor('#2c3e50'),
+                textColor: processColor('white'),
+              }}
+              chartDescription={{text: ''}}
+              legend={{
+                enabled: true,
+                textSize: 14,
+                form: 'CIRCLE',
+                wordWrapEnabled: true,
+              }}
+              xAxis={{}}
+              yAxis={{}}
+              maxVisibleValueCount={16}
+              autoScaleMinMaxEnabled={false}
+            />
+          )}
         </View>
         <View
           style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
@@ -153,18 +158,79 @@ export default function MarketDetailScreen({route}) {
               justifyContent: 'space-between',
               paddingRight: '4%',
             }}>
-            <View style={[styles.btn_wrap, {backgroundColor: '#00889e'}]}>
-              <Text style={[styles.btn_text, {color: 'white'}]}>Daily</Text>
-            </View>
-            <View style={styles.btn_wrap}>
-              <Text style={styles.btn_text}>Weekly</Text>
-            </View>
-            <View style={styles.btn_wrap}>
-              <Text style={styles.btn_text}>Monthly</Text>
-            </View>
-            <View style={styles.btn_wrap}>
-              <Text style={styles.btn_text}>Yearly</Text>
-            </View>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                setTime('1d');
+              }}>
+              <View
+                style={[
+                  styles.btn_wrap,
+                  Time == '1d' ? {backgroundColor: '#00889e'} : null,
+                ]}>
+                <Text
+                  style={[
+                    styles.btn_text,
+                    Time == '1d' ? {color: 'white'} : null,
+                  ]}>
+                  Daily
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                setTime('1w');
+              }}>
+              <View
+                style={[
+                  styles.btn_wrap,
+                  Time == '1w' ? {backgroundColor: '#00889e'} : null,
+                ]}>
+                <Text
+                  style={[
+                    styles.btn_text,
+                    Time == '1w' ? {color: 'white'} : null,
+                  ]}>
+                  Weekly
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                setTime('1m');
+              }}
+              style={[
+                styles.btn_wrap,
+                Time == '1m' ? {backgroundColor: '#00889e'} : null,
+              ]}>
+              <Text
+                style={[
+                  styles.btn_text,
+                  Time == '1m' ? {color: 'white'} : null,
+                ]}>
+                Monthly
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                SimpleToast.show(
+                  'Coming soon for 1year....',
+                  SimpleToast.SHORT,
+                );
+              }}
+              style={[
+                styles.btn_wrap,
+                Time == '1y' ? {backgroundColor: '#00889e'} : null,
+              ]}>
+              <Text
+                style={[
+                  styles.btn_text,
+                  Time == '1y' ? {color: 'white'} : null,
+                ]}>
+                Yearly
+              </Text>
+            </TouchableOpacity>
           </View>
           <View
             style={{

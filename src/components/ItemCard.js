@@ -9,6 +9,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {LineChart} from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
+import SimpleToast from 'react-native-simple-toast';
 
 export default function ItemCard({item}) {
   const navigation = useNavigation();
@@ -21,7 +22,9 @@ export default function ItemCard({item}) {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate('MarketDetail', {item});
+        item.symbol === 'usdt'
+          ? SimpleToast.show('Plz choose another coin', SimpleToast.SHORT)
+          : navigation.navigate('MarketDetail', {item});
       }}>
       <View style={styles.item_container}>
         <View style={styles.top_container}>
