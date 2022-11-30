@@ -82,7 +82,7 @@ export default function ItemCard({item}) {
             </View>
           )}
           <LineChart
-            style={{height: '100%', width: '60%', marginLeft: '10%'}}
+            style={{height: '100%', width: '60%', marginLeft: '11%'}}
             data={item.sparkline_in_7d.price}
             svg={{stroke: 'black'}}
             curve={shape.curveNatural}
