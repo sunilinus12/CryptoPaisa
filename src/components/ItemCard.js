@@ -18,7 +18,6 @@ export default function ItemCard({item}) {
     return false;
   };
 
-  console.log(item.sparkline_in_7d.price);
   return (
     <TouchableWithoutFeedback
       onPress={() => {

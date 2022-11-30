@@ -17,6 +17,7 @@
     "jetifier": "^2.0.0",
     "react": "17.0.2",
     "react-native": "0.68.2",
+    "react-native-charts-wrapper": "^0.5.11",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-loading-spinner-overlay": "^3.0.1",

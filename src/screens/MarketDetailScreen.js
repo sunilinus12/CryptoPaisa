@@ -1,21 +1,59 @@
 import {
   ActivityIndicator,
   Image,
+  processColor,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {CandleStickChart} from 'react-native-charts-wrapper';
+import axios from 'axios';
 
 export default function MarketDetailScreen({route}) {
   const {item} = route.params;
-
+  const [chartdata, setChartData] = useState([]);
+  const [loading, setloading] = useState(false);
   const handleTriangle = i => {
     if (i >= 0) return true;
     return false;
   };
+
+  const handleChart = async () => {
+    try {
+      console.log(item.symbol);
+      const res = await axios.get(
+        `https://api.binance.com/api/v3/klines?symbol=${(item?.symbol).toUpperCase()}USDT&interval=1h&limit=10`,
+      );
+      console.log('worign..');
+      if (res.status) {
+        let r = res.data.map(i => {
+          return {
+            shadowH: parseFloat(i[2]),
+            shadowL: parseFloat(i[3]),
+            open: parseFloat(i[1]),
+            close: parseFloat(i[4]),
+          };
+        });
+        r = JSON.parse(JSON.stringify(r));
+        console.log('hello', r);
+        setChartData(r);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    handleChart();
+  }, []);
+
+  if (chartdata.length === 0) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size={'large'} color="red" />
+      </View>
+    );
+  }
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <SafeAreaView style={styles.topContainer}>
@@ -61,11 +99,47 @@ export default function MarketDetailScreen({route}) {
           style={{
             width: '100%',
             height: 400,
-            backgroundColor: 'white',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: '#f6f9fb',
           }}>
-          <ActivityIndicator size={'large'} color={'red'} />
+          <CandleStickChart
+            style={{flex: 1}}
+            data={{
+              dataSets: [
+                {
+                  values: chartdata,
+                  label: '',
+                  config: {
+                    highlightColor: processColor('darkgray'),
+
+                    shadowColor: processColor('black'),
+                    shadowWidth: 1,
+                    shadowColorSameAsCandle: true,
+                    increasingColor: processColor('#71BD6A'),
+                    increasingPaintStyle: 'FILL',
+                    decreasingColor: processColor('#D14B5A'),
+                  },
+                  xAxis: {},
+                  yAxis: {},
+                },
+              ],
+            }}
+            marker={{
+              enabled: true,
+              markerColor: processColor('#2c3e50'),
+              textColor: processColor('white'),
+            }}
+            chartDescription={{text: ''}}
+            legend={{
+              enabled: true,
+              textSize: 14,
+              form: 'CIRCLE',
+              wordWrapEnabled: true,
+            }}
+            xAxis={{}}
+            yAxis={{}}
+            maxVisibleValueCount={16}
+            autoScaleMinMaxEnabled={false}
+          />
         </View>
         <View
           style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
@@ -207,3 +281,5 @@ const styles = StyleSheet.create({
     marginTop: '2.1%',
   },
 });
+
+const data = {};
